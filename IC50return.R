@@ -4,6 +4,9 @@
 # drc.upper input options are NA (4 parameter) or a number to lock the upper limit of the drc (3 parameter)
 #
 
+library(dplyr)
+library(drc)
+
 ic50return<-function(drdf, ic = 50, drc.upper = NA) {
   ic <- 100-ic
   doseResponse <- tryCatch(expr = drm(data = drdf, response ~ dose, fct = LL.4(fixed = c(NA, NA, drc.upper, NA), names=c("H","E0","top", "EC50"))), 
