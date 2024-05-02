@@ -5,12 +5,13 @@
 #
 
 library(dplyr)
-library(drc)
+library(drc, exclude = select)
 
-ic50return<-function(drdf, ic = 50, drc.upper = NA) {
+ic50return<-function(doseCol, responseCol, ic = 50, drc.upper = NA) {
   ic <- 100-ic
+  drdf <- data.frame(dose = doseCol, response = responseCol)
   doseResponse <- tryCatch(expr = drm(data = drdf, response ~ dose, fct = LL.4(fixed = c(NA, NA, drc.upper, NA), names=c("H","E0","top", "EC50"))), 
-           error = function(e) {return(NA)})
+                           error = function(e) {return(NA)})
   if (is.na(doseResponse[1]) == FALSE) {
     E0 <- doseResponse$coefficients[2]
     top <- ifelse(is.na(drc.upper), doseResponse$coefficients[3], drc.upper)
